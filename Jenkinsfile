@@ -13,8 +13,8 @@ pipeline {
         stage('Build & Start Test Environment') {
             steps {
                 sh '''
-                  docker-compose down -v
-                  docker-compose up --build -d
+                  docker compose down -v
+                  docker compose up --build -d
                 '''
             }
         }
@@ -22,7 +22,7 @@ pipeline {
         stage('Run API Tests') {
             steps {
                 sh '''
-                  docker-compose run --rm node-test
+                  docker compose run --rm node-test
                 '''
             }
         }
@@ -30,7 +30,7 @@ pipeline {
         stage('Cleanup') {
             steps {
                 sh '''
-                  docker-compose down -v
+                  docker compose down -v
                 '''
             }
         }

@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: test-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: testdb
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      retries: 10
+
+  php-apache:
+    build: ./docker/php
+    container_name: test-php
+    ports:
+      - "8081:80"
+    volumes:
+      - ./app:/var/www/html
+    environment:
+      DB_HOST: mysql
+      DB_NAME: testdb
+      DB_USER: root
+      DB_PASS: root
+    depends_on:
+      mysql:
+        condition: service_healthy

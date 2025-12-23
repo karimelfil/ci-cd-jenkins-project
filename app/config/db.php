@@ -1,6 +1,5 @@
 <?php
-
-$host = getenv('DB_HOST') ?: 'localhost';
+$host = getenv('DB_HOST') ?: 'mysql';
 $db   = getenv('DB_NAME') ?: 'testdb';
 $user = getenv('DB_USER') ?: 'root';
 $pass = getenv('DB_PASS') ?: 'root';
@@ -17,3 +16,4 @@ try {
     echo "Database connection failed";
     exit;
 }
+?>

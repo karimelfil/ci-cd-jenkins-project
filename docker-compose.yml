@@ -1,5 +1,4 @@
-version: "3.9"
-
+version: '3.8'
 services:
   mysql:
     image: mysql:8.0
@@ -10,7 +9,7 @@ services:
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
       retries: 10
 
@@ -29,3 +28,11 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+
+  node-test:
+    build: ./docker/test
+    container_name: test-node
+    volumes:
+      - ./docker/test/test.js:/tests/test.js
+    depends_on:
+      - php-apache

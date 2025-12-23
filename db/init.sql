@@ -1,11 +1,11 @@
-CREATE DATABASE IF NOT EXISTS testdb;
-
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'testdb')
+    CREATE DATABASE testdb;
 USE testdb;
 
-CREATE TABLE IF NOT EXISTS messages (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    message VARCHAR(255) NOT NULL
-);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'messages')
+    CREATE TABLE messages (
+        id INT PRIMARY KEY IDENTITY(1,1),
+        message VARCHAR(255) NOT NULL
+    );
 
-INSERT INTO messages (message)
-VALUES ('Hello world');
+INSERT INTO messages (message) VALUES ('hello world');

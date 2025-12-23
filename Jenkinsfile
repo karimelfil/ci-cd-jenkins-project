@@ -18,13 +18,9 @@ pipeline {
         stage('Build & Start Test Environment') {
             steps {
                 sh '''
-                  # Use docker-compose with hyphen
-                  docker-compose down -v
+                  docker-compose down -v || true
                   docker-compose up --build -d
-                  
-                  # OR if using Docker Compose V2:
-                  # docker compose down -v
-                  # docker compose up --build -d
+                  sleep 30
                 '''
             }
         }
@@ -33,7 +29,6 @@ pipeline {
             steps {
                 sh '''
                   docker-compose run --rm node-test
-                  # OR: docker compose run --rm node-test
                 '''
             }
         }
@@ -42,7 +37,6 @@ pipeline {
             steps {
                 sh '''
                   docker-compose down -v
-                  # OR: docker compose down -v
                 '''
             }
         }

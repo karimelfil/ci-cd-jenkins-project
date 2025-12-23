@@ -1,5 +1,4 @@
 <?php
-
 require_once __DIR__ . '/../config/db.php';
 
 $stmt = $pdo->query("SELECT message FROM messages LIMIT 1");
@@ -11,3 +10,4 @@ if ($row) {
     http_response_code(404);
     echo "No message found";
 }
+?>

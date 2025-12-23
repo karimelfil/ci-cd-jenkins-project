@@ -4,8 +4,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                // Method A: With credentials (RECOMMENDED)
-                checkout(scm: [
+                checkout([
                     $class: 'GitSCM',
                     branches: [[name: '*/main']],
                     userRemoteConfigs: [[
@@ -13,22 +12,19 @@ pipeline {
                         credentialsId: 'github-token'
                     ]]
                 ])
-                
-                // OR Method B: Simple git with auth
-                // withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                //     sh '''
-                //         git config --global http.extraheader "Authorization: token ${GITHUB_TOKEN}"
-                //         git clone https://github.com/karimelfil/ci-cd-jenkins-project.git .
-                //     '''
-                // }
             }
         }
 
         stage('Build & Start Test Environment') {
             steps {
                 sh '''
-                  docker compose down -v
-                  docker compose up --build -d
+                  # Use docker-compose with hyphen
+                  docker-compose down -v
+                  docker-compose up --build -d
+                  
+                  # OR if using Docker Compose V2:
+                  # docker compose down -v
+                  # docker compose up --build -d
                 '''
             }
         }
@@ -36,7 +32,8 @@ pipeline {
         stage('Run API Tests') {
             steps {
                 sh '''
-                  docker compose run --rm node-test
+                  docker-compose run --rm node-test
+                  # OR: docker compose run --rm node-test
                 '''
             }
         }
@@ -44,7 +41,8 @@ pipeline {
         stage('Cleanup') {
             steps {
                 sh '''
-                  docker compose down -v
+                  docker-compose down -v
+                  # OR: docker compose down -v
                 '''
             }
         }
